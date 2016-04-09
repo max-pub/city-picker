@@ -1,0 +1,63 @@
+
+<link rel="import" href="one-city.html">
+
+
+<dom-module id="mega-cities">
+    <style>
+        :host{
+            width: 100%;
+            display: block;
+            margin: 0;
+            padding:0;
+        }
+        one-city{
+            margin-left: 5px;
+        }
+    </style>
+
+
+    <template>
+        <template is="dom-repeat" items="{{defaults}}">
+            <place-item data="[[item]]" population-info='show'></place-item>
+        </template>       
+    </template>
+</dom-module>
+
+
+
+
+
+<script>
+    Polymer({
+        is: "mega-cities",
+
+        ready: function () {
+            STORE.get('MegaCities',function(cities){
+                this.set('defaults',cities);
+            }.bind(this));
+            STORE.onChange('MegaCities',function(key,cities){
+                console.log("STORE-change",key,cities);
+                this.set('defaults',cities);
+            }.bind(this));
+            GEO.ajax('http://api.max.pub/MegaCities.json', function(cities){
+                cities = JSON.parse(cities);
+                cities.sort(this.populationSort);
+                STORE.set('MegaCities',cities);
+                // this.set('defaults',cities);
+            }.bind(this));
+        },
+        
+        citySort: function(a,b){ // asc
+            if(a.city<b.city) return -1;
+            if(a.city>b.city) return 1;
+            return 0;
+        },
+        populationSort: function(a,b){ // desc
+            if(a.population<b.population) return 1;
+            if(a.population>b.population) return -1;
+            return 0;
+        }
+
+    });
+</script>
+

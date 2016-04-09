@@ -1,0 +1,59 @@
+
+<link rel="import" href="one-city.html">
+
+
+<dom-module id="recent-cities">
+    <style>
+        :host{
+            width: 100%;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+        one-city{
+            margin-left: 5px;
+        }
+    </style>
+
+
+    <template>
+        <template is="dom-repeat" items="{{favorites}}">
+            <one-city data="[[item]]" remove-button='show'></one-city>
+        </template>       
+    </template>
+</dom-module>
+
+
+
+
+
+<script>
+    Polymer({
+        is: "recent-cities",
+
+        ready: function () {
+            this.loadFavorites();
+            STORE.onChange('.* name',function(key,val){
+                console.log("STORE-change",key,val);
+                this.loadFavorites();
+            }.bind(this));
+        },
+
+        loadFavorites: function(){
+            STORE.getAll(function(list){
+                var favorites = [];
+                for(var i in list)
+                    if(i.indexOf('name')!==-1)
+                        favorites.push(list[i]);
+                favorites.sort(this.citySort);
+                this.set('favorites',favorites);
+            }.bind(this));
+        },
+        citySort: function(a,b){ // asc
+            if(a.city<b.city) return -1;
+            if(a.city>b.city) return 1;
+            return 0;
+        }
+
+    });
+</script>

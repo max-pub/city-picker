@@ -1,0 +1,46 @@
+<link rel="import" href="one-city.html">
+
+
+<dom-module id="nearby-cities">
+    <style>
+        :host{
+            width: 100%;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+        one-city{
+            margin-left: 5px;
+        }
+    </style>
+
+
+    <template>
+        <one-city data="[[gps]]"></one-city>
+        <one-city data="[[ip]]"></one-city>
+    </template>
+</dom-module>
+
+
+
+
+
+<script>
+    Polymer({
+        is: "nearby-cities",
+
+        ready: function () {
+            GEO.gps(function(pos){
+                GEO.search(pos.lat+','+pos.lon, function(places){
+                    this.set('gps',places[0]);
+                }.bind(this),{type:'city'});
+            }.bind(this));
+            
+            GEO.ip(function(pos){
+                GEO.search(pos.lat+','+pos.lon, function(places){
+                    this.set('ip',places[0]);
+                }.bind(this),{type:'city'});
+            }.bind(this));
+        }
+    });
+</script>

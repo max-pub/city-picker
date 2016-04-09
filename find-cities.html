@@ -1,0 +1,56 @@
+<link rel="import" href="one-city.html">
+
+
+<dom-module id="find-cities">
+    <style>
+        :host{
+            width: 100%;
+            display: block;
+            margin: 0;
+            padding:0;
+        }
+        input{
+            font-size: 1.3em;
+            background: transparent;
+            color: white;
+            width: 99%;
+            border: none;
+            border-bottom: 1px solid silver;
+            font-weight: 300;
+        }
+        input:focus{
+            outline: none;
+        }
+        
+        one-city{
+            margin-left: 5px;
+        }
+
+    </style>
+
+
+    <template>
+        <input type='search' placeholder="search..." on-search="search"/>
+        <template is="dom-repeat" items="{{searchResults}}">
+            <one-city data="[[item]]"></one-city>
+        </template>       
+    </template>
+</dom-module>
+
+
+
+
+
+<script>
+    Polymer({
+        is: "find-cities",
+        search: function(event, recurse){
+            var query = event.target.value;
+            GEO.search(query, function(places){
+                console.log('place-search',places);
+                if((!places.length)&&(!recurse)) return this.search({target:{value:query+' city'}}, true);
+                this.set('searchResults',places);
+            }.bind(this), {type:'city'});
+        },
+    });
+</script>
