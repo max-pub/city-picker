@@ -17,8 +17,8 @@
 
 
     <template>
-        <template is="dom-repeat" items="[[defaults]]">
-            <one-city data="[[item]]" type='megacity'></one-city>
+        <template is="dom-repeat" items="{{defaults}}">
+            <place-item data="[[item]]" population-info='show'></place-item>
         </template>       
     </template>
 </dom-module>
@@ -32,8 +32,19 @@
         is: "mega-cities",
 
         ready: function () {
-            MegaCities.sort(this.populationSort);
-            this.set('defaults',MegaCities);
+            STORE.get('MegaCities',function(cities){
+                this.set('defaults',cities);
+            }.bind(this));
+            STORE.onChange('MegaCities',function(key,cities){
+                console.log("STORE-change",key,cities);
+                this.set('defaults',cities);
+            }.bind(this));
+            GEO.ajax('http://api.max.pub/MegaCities.json', function(cities){
+                cities = JSON.parse(cities);
+                cities.sort(this.populationSort);
+                STORE.set('MegaCities',cities);
+                // this.set('defaults',cities);
+            }.bind(this));
         },
         
         citySort: function(a,b){ // asc

@@ -17,8 +17,8 @@
 
 
     <template>
-        <template is="dom-repeat" items="{{favorites}}">
-            <one-city data="[[item]]" remove-button='show'></one-city>
+        <template is="dom-repeat" items="[[favorites]]">
+            <one-city data="[[item]]" type='favorite'></one-city>
         </template>       
     </template>
 </dom-module>
@@ -33,7 +33,7 @@
 
         ready: function () {
             this.loadFavorites();
-            STORE.onChange('.* name',function(key,val){
+            STORE.onChange('.* city',function(key,val){
                 console.log("STORE-change",key,val);
                 this.loadFavorites();
             }.bind(this));
@@ -43,7 +43,7 @@
             STORE.getAll(function(list){
                 var favorites = [];
                 for(var i in list)
-                    if(i.indexOf('name')!==-1)
+                    if(i.indexOf('city')!==-1)
                         favorites.push(list[i]);
                 favorites.sort(this.citySort);
                 this.set('favorites',favorites);

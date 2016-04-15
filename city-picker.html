@@ -8,7 +8,7 @@
 <dom-module id="city-picker">
     <style>
         :host{
-            width: 100%;
+            /*width: 100%;*/
             display: block;
             position: relative;
             margin:0;
@@ -20,24 +20,19 @@
             margin-bottom: 0;
             text-decoration: none;            
         }
-        main{
-            padding: var(--padding);
-        }
     </style>
 
     <template>
-        <main>
-            <find-cities on-select="selected"></find-cities>
+        <find-cities></find-cities>
 
-            <h3>Nearby</h3>
-            <nearby-cities on-select="selected"></nearby-cities>
+        <h3>Nearby</h3>
+        <nearby-cities></nearby-cities>
 
-            <h3>Favorites</h3>
-            <recent-cities on-select="selected"></recent-cities>
+        <h3>Favorites</h3>
+        <recent-cities></recent-cities>
 
-            <h3><a href="http://en.wikipedia.org/wiki/Megacity" target='_blank'>MegaCities</a></h3>
-            <mega-cities on-select="selected"></mega-cities>
-        </main>
+        <h3><a href="http://en.wikipedia.org/wiki/Megacity" target='_blank'>MegaCities</a></h3>
+        <mega-cities></mega-cities>
     </template>
 </dom-module>
 
@@ -48,9 +43,5 @@
 <script>
     Polymer({
         is: "city-picker",
-        selected: function (ev) {
-            console.log('city-picker selected',ev.detail);
-            this.fire('select',ev.detail);
-        },
     });
 </script>
