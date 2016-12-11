@@ -17,6 +17,7 @@
             border: none;
             border-bottom: 1px solid silver;
             font-weight: 300;
+            -webkit-appearance: none;
         }
         input:focus{
             outline: none;
@@ -30,7 +31,7 @@
 
 
     <template>
-        <input id='search' type='search' placeholder="search..." on-search="search" on-keydown='searchDelayed'/>
+        <input id='search' type='search' placeholder="find city..." on-search="search" on-keydown='searchDelayed'/>
         <template is="dom-repeat" items="{{searchResults}}">
             <one-city data="[[item]]" type='search'></one-city>
         </template>       
